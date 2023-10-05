@@ -1,6 +1,6 @@
 # This script can be used for supervised fine-tuning of open source models from Hugging Face Hub 
-# for question answering over sources.  For example, to fine-tune LLaMA-2-7B on the small demo
-# dataset included in this repo and save the LoRA adaptor weights in the subdirectory ./models, 
+# with QLoRA for question answering over sources.  For example, to fine-tune LLaMA-2-7B on the small demo
+# dataset included in this repo and save the LoRA adaptor weights in the subdirectory ../model, 
 # run
 #
 # python train.py --fp16
@@ -20,6 +20,9 @@
 #   peft==0.4.0
 #   transformers==4.31.0
 #   trl==0.4.7
+# 
+# The code has been testing on an AWS EC2 g5.4xl instance with an NVIDIA A10G having 24GB GPU memory
+# but should run fine on a GPU having 16GB of memory.
 # 
 # This code is based on 
 #      https://github.com/dstackai/dstack-examples/blob/main/llama-2/train.py
