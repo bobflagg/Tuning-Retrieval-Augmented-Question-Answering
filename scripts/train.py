@@ -51,7 +51,7 @@ class ScriptArguments:
         default="../data/level-1-prompt-prefix.txt", metadata={"help": "Path to a file with the prefix to append to train/test prompts."}
     )
     output_directory: Optional[str] = field(
-        default="./models", metadata={"help": "The directory where fine-tuned models will be saved."}
+        default="../models", metadata={"help": "The directory where fine-tuned models will be saved."}
     )
     fold: Optional[int] = field(
         default=10, metadata={"help": "The dataset fold to omit in training."}
