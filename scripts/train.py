@@ -1,4 +1,30 @@
-# Based on https://github.com/dstackai/dstack-examples/blob/main/llama-2/train.py
+# This script can be used for supervised fine-tuning of open source models from Hugging Face Hub 
+# for question answering over sources.  For example, to fine-tune LLaMA-2-7B on the small demo
+# dataset included in this repo and save the LoRA adaptor weights in the subdirectory ./models, 
+# run
+#
+# python train.py --fp16
+#
+# This will train the model for one epoch on records having folds 0 - 9 so evaluation can be done on records with fold 10.
+# If the base model weights are not already available on your system, you'll first need to login to the hub:
+#
+# huggingface-cli login --token hf_...
+#
+# To review generated answers for the base and fine-tuned models, see ../notebook/Review-Generated-Answers.ipynb.
+#
+# The key requirements to run this script are
+# 
+#   accelerate==0.21.0
+#   bitsandbytes==0.40.2
+#   huggingface_hub==0.17.1
+#   peft==0.4.0
+#   transformers==4.31.0
+#   trl==0.4.7
+# 
+# This code is based on 
+#      https://github.com/dstackai/dstack-examples/blob/main/llama-2/train.py
+# with minor modifications to simplify data loading.
+#
 
 from dataclasses import dataclass, field
 from datasets import Dataset
@@ -18,17 +44,17 @@ from typing import Optional, Union
 
 @dataclass
 class ScriptArguments:
-    data_path: str = field(
-        default=None, metadata={"help": "Path to a CSV file with train/test data."}
+    data_path: Optional[str] = field(
+        default="../data/train-test-df.csv", metadata={"help": "Path to a CSV file with train/test data."}
     )
-    prefix_path: str = field(
-        default=None, metadata={"help": "Path to a file with the prefix to append to train/test prompts."}
+    prefix_path: Optional[str] = field(
+        default="../data/level-1-prompt-prefix.txt", metadata={"help": "Path to a file with the prefix to append to train/test prompts."}
     )
-    output_directory: str = field(
-        default=None, metadata={"help": "The directory where fine-tuned models will be saved."}
+    output_directory: Optional[str] = field(
+        default="./models", metadata={"help": "The directory where fine-tuned models will be saved."}
     )
     fold: Optional[int] = field(
-        default=1, metadata={"help": "The dataset fold to omit in training."}
+        default=10, metadata={"help": "The dataset fold to omit in training."}
     )
     per_device_train_batch_size: Optional[int] = field(
         default=4, metadata={"help": "Batch size per GPU for training."}
@@ -71,7 +97,7 @@ class ScriptArguments:
         },
     )
     new_model_name: Optional[str] = field(
-        default="Llama-2-7b-qa-level-1",
+        default="Llama-2-7b-qa",
         metadata={
             "help": "The name under which to push the fine-tuned model to the Hugging Face Hub."
         },
