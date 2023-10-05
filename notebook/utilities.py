@@ -39,7 +39,7 @@ def load_lora(model_name, directory, pad_token = "<PAD>", padding_side = "right"
 def build_prompt(x, prefix):
     return f"<s>[INST] {prefix}\n\n%%EXCERPT: {x.excerpt}\n\n%%QUESTION: {x.question}[/INST]\n\n%%ANSWER:"   
 
-def display_sample(x, prefix=None, generator=None, max_width=120, max_new_tokens=256):
+def display_sample(x, prefix=None, generator=None, max_width=100, max_new_tokens=256):
     def print_boxed(text):
         lines = textwrap.wrap(text, max_width)  # Wrap text to desired width
         border = '+' + '-' * (max_width + 2) + '+'
